@@ -166,6 +166,10 @@ defmodule StatsdMetricTest do
       end)
     end
 
+    test "errors on a metric with invalid value" do
+      assert_raise(StatsdMetric.BadValueError, fn -> StatsdMetric.decode!("namespaced.value:string|c") end)
+    end
+
     test "errors on a metric with no type" do
       assert_raise(StatsdMetric.NoTypeError, fn ->
         StatsdMetric.decode!("namespaced.value:10|")

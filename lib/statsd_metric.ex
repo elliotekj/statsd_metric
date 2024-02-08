@@ -54,6 +54,8 @@ defmodule StatsdMetric do
     meter: "m"
   }
 
+  @nb_chars ~c"+-0123456789.eE"
+
   @doc """
   Encodes a `%StatsdMetric{}` into a StatsD metric IO list.
 
@@ -136,6 +138,7 @@ defmodule StatsdMetric do
       {:error, :empty} -> raise StatsdMetric.EmptyError
       {:error, :no_key} -> raise StatsdMetric.NoKeyError
       {:error, :no_value} -> raise StatsdMetric.NoValueError
+      {:error, :bad_value} -> raise StatsdMetric.BadValueError
       {:error, :no_type} -> raise StatsdMetric.NoTypeError
     end
   end
@@ -192,8 +195,11 @@ defmodule StatsdMetric do
       <<?|, rest::binary>> ->
         eval_type(rest, [{:value, to_float(val_buffer)} | metric_buffer])
 
-      <<byte, rest::binary>> ->
+      <<byte, rest::binary>> when byte in @nb_chars ->
         eval_value(rest, val_buffer <> <<byte>>, metric_buffer)
+
+      _ ->
+        {:error, :bad_value}
     end
   end
 

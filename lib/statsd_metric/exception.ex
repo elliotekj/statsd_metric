@@ -22,6 +22,15 @@ defmodule StatsdMetric.NoValueError do
   defexception message: "no value error"
 end
 
+defmodule StatsdMetric.BadValueError do
+  @moduledoc """
+  An exception raised when the stat passed to the decoder has a value that can't
+  be parsed into a float.
+  """
+
+  defexception message: "bad value error"
+end
+
 defmodule StatsdMetric.NoTypeError do
   @moduledoc """
   An exception raised when the stat passed to the decoder has no type.
