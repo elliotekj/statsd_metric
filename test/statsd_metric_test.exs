@@ -49,8 +49,15 @@ defmodule StatsdMetricTest do
                "namespaced.value:10|c|@1.0"
     end
 
-    test "encodes a metric with tags" do
+    test "encodes a metric with tags as keyword list" do
       tags = [node: node(), tagged: true]
+
+      assert StatsdMetric.encode_to_string("namespaced.value", 10, :counter, tags: tags) ==
+               "namespaced.value:10|c|#node:nonode@nohost,tagged:true"
+    end
+
+    test "encodes a metric with tags as strings" do
+      tags = ["node:#{node()}", "tagged:true"]
 
       assert StatsdMetric.encode_to_string("namespaced.value", 10, :counter, tags: tags) ==
                "namespaced.value:10|c|#node:nonode@nohost,tagged:true"

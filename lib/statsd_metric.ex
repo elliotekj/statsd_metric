@@ -160,6 +160,7 @@ defmodule StatsdMetric do
       Enum.map(tags, fn
         {k, v} when is_atom(v) -> "#{k}:#{Atom.to_string(v)}"
         {k, v} -> "#{k}:#{v}"
+        t when is_binary(t) -> t
       end)
 
     [metric | ["|#", Enum.join(tags, ",")]]
