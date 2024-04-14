@@ -2,6 +2,45 @@ defmodule StatsdMetricTest do
   use ExUnit.Case
   doctest StatsdMetric
 
+  describe "encode/1" do
+    test "encodes metric" do
+      metric = %StatsdMetric{
+        key: "namespaced.value",
+        value: 10.0,
+        type: :counter,
+        sample_rate: 1.0,
+        tags: %{
+          "node" => "nonode@nohost",
+          "tagged" => "true"
+        }
+      }
+
+      assert StatsdMetric.encode(metric) == [
+               [["namespaced.value", 58, "10.0", 124, "c"], "|@", "1.0"],
+               "|#",
+               "node:nonode@nohost,tagged:true"
+             ]
+    end
+  end
+
+  describe "encode_to_string/1" do
+    test "encodes metric" do
+      metric = %StatsdMetric{
+        key: "namespaced.value",
+        value: 10.0,
+        type: :counter,
+        sample_rate: 1.0,
+        tags: %{
+          "node" => "nonode@nohost",
+          "tagged" => "true"
+        }
+      }
+
+      assert StatsdMetric.encode_to_string(metric) ==
+               "namespaced.value:10.0|c|@1.0|#node:nonode@nohost,tagged:true"
+    end
+  end
+
   describe "encode_parts/3" do
     test "encodes a basic metric" do
       assert StatsdMetric.encode_parts("namespaced.value", 10, :counter) == [

@@ -30,6 +30,16 @@ end
 
 #### Encoding Example
 
+```elixir
+iex> metric = %StatsdMetric{key: "name.spaced", value: 1.0, type: :counter}
+iex> StatsdMetric.encode(metric)
+["name.spaced", 58, "1.0", 124, "c"]
+
+iex> metric = %StatsdMetric{key: "name.spaced", value: 1.0, type: :counter}
+iex> StatsdMetric.encode_to_string(metric)
+"name.spaced:1.0|c"
+```
+
 Directly encoding stat parameters is also supported:
 
 ```elixir

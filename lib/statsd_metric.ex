@@ -15,6 +15,14 @@ defmodule StatsdMetric do
 
   ## Encoding Example
 
+      iex> metric = %StatsdMetric{key: "name.spaced", value: 1.0, type: :counter}
+      iex> StatsdMetric.encode(metric)
+      ["name.spaced", 58, "1.0", 124, "c"]
+
+      iex> metric = %StatsdMetric{key: "name.spaced", value: 1.0, type: :counter}
+      iex> StatsdMetric.encode_to_string(metric)
+      "name.spaced:1.0|c"
+
   Directly encoding stat parameters is also supported:
 
       iex> StatsdMetric.encode_parts("name.spaced", 1.0, :counter)
@@ -74,6 +82,34 @@ defmodule StatsdMetric do
   }
 
   @nb_chars ~c"+-0123456789.eE"
+
+  @doc """
+  Encodes a `%StatsdMetric{}` into a StatsD metric IO list.
+
+      iex> StatsdMetric.encode(%StatsdMetric{key: "name.spaced", value: 1.0, type: :counter})
+      ["name.spaced", 58, "1.0", 124, "c"]
+  """
+  @spec encode(t()) :: iolist()
+  def encode(metric) do
+    encode_parts(metric.key, metric.value, metric.type,
+      tags: metric.tags,
+      sample_rate: metric.sample_rate
+    )
+  end
+
+  @doc """
+  Encodes a `%StatsdMetric{}` into a StatsD metric string.
+
+      iex> StatsdMetric.encode_to_string(%StatsdMetric{key: "name.spaced", value: 1.0, type: :counter})
+      "name.spaced:1.0|c"
+  """
+  @spec encode_to_string(t()) :: binary()
+  def encode_to_string(metric) do
+    encode_parts_to_string(metric.key, metric.value, metric.type,
+      tags: metric.tags,
+      sample_rate: metric.sample_rate
+    )
+  end
 
   @doc """
   Encodes stat parameters into a StatsD metric IO list.
