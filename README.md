@@ -1,5 +1,9 @@
 # Statsd Metric
 
+[![Hex.pm Version](http://img.shields.io/hexpm/v/statsd_metric.svg?style=flat)](https://hex.pm/packages/statsd_metric)
+[![Hex.pm License](http://img.shields.io/hexpm/l/statsd_metric.svg?style=flat)](https://hex.pm/packages/statsd_metric)
+[![HexDocs](https://img.shields.io/badge/HexDocs-Yes-blue)](https://hexdocs.pm/statsd_metric)
+
 **A fast StatsD / DogStatsD metric encoder and single-pass parser.**
 
 `StatsdMetric` supports all standard StatsD metric types:
