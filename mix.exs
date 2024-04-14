@@ -1,7 +1,7 @@
 defmodule StatsdMetric.MixProject do
   use Mix.Project
 
-  @version "0.1.2"
+  @version "1.0.0"
   @repo_url "https://github.com/elliotekj/statsd_metric"
 
   def project do

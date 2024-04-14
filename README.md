@@ -21,7 +21,7 @@ dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:statsd_metric, "~> 0.1"}
+    {:statsd_metric, "~> 1.0"}
   ]
 end
 ```
