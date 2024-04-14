@@ -30,13 +30,13 @@ end
 
 #### Encoding Example
 
-Encoding supports IO list and string return types.
+Directly encoding stat parameters is also supported:
 
-``` elixir
-iex> StatsdMetric.encode("name.spaced", 1.0, :counter)
+```elixir
+iex> StatsdMetric.encode_parts("name.spaced", 1.0, :counter)
 ["name.spaced", 58, "1.0", 124, "c"]
 
-iex> StatsdMetric.encode_to_string("name.spaced", 1.0, :counter)
+iex> StatsdMetric.encode_parts_to_string("name.spaced", 1.0, :counter)
 "name.spaced:1.0|c"
 ```
 
@@ -51,6 +51,27 @@ iex> StatsdMetric.decode!("name.spaced:1.0|c|@0.1|#foo:bar")
   sample_rate: 0.1,
   tags: %{"foo" => "bar"}
 }
+```
+
+Multiple metrics separated by a newline are also supported:
+
+``` elixir
+iex> StatsdMetric.decode!("first.metric:1.0|c|@0.1|#foo:bar\\nsecond.metric:15.0|g|#foo:bar")
+[
+  %StatsdMetric{
+    key: "first.metric",
+    value: 1.0,
+    type: :counter,
+    sample_rate: 0.1,
+    tags: %{"foo" => "bar"}
+  },
+  %StatsdMetric{
+    key: "second.metric",
+    value: 15.0,
+    type: :gauge,
+    tags: %{"foo" => "bar"}
+  }
+]
 ```
 
 ## License
